@@ -35,26 +35,37 @@ class HomeScreen extends StatelessWidget {
               child: SearchField(),
             ),
           ),
-          //SizedBox
+          // SizedBox
+          SliverToBoxAdapter(
+            child: SizedBox(height: 20),
+          ),
+          // Label Dropdown
+          SliverToBoxAdapter(
+            child: Row(
+              children: [
+                LabelDropdown(labelName: "Tasks"),
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 }
 
-class DropDownCard extends StatelessWidget {
-  const DropDownCard({
+class LabelDropdown extends StatelessWidget {
+  const LabelDropdown({
     super.key,
-    required this.text,
+    required this.labelName,
   });
 
-  final String text;
+  final String labelName;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24),
+      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 0),
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: theme.cardColor,
@@ -63,13 +74,10 @@ class DropDownCard extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            text,
+            labelName,
             style: textTheme.labelMedium,
           ),
-          SizedBox(
-            width: 10,
-          ),
-          Icon(Icons.keyboard_arrow_down)
+          Icon(Icons.keyboard_arrow_down),
         ],
       ),
     );
