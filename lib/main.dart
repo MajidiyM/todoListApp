@@ -51,15 +51,14 @@ class HomeScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: SizedBox(height: 16),
           ),
-          // TaskCard
-          SliverToBoxAdapter(
-            child: TaskCard(
-              title: 'Do math homework',
-              startDate: '15.10.24',
-              endDate: '20.10.24',
-              category: 'University',
-              priority: '2',
-            ),
+          SliverList.builder(
+            itemCount: 5,
+            itemBuilder: (context, index) => TaskCard(
+                title: "Take out dog",
+                startDate: "15.10.24",
+                endDate: "15.10.24",
+                category: "Home",
+                priority: "4"),
           ),
         ],
       ),
@@ -87,7 +86,7 @@ class TaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24),
+      margin: EdgeInsets.symmetric(horizontal: 24).copyWith(bottom: 15),
       padding: EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         color: theme.cardColor,
