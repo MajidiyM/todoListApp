@@ -17,11 +17,7 @@ final darkTheme = ThemeData(
     backgroundColor: Color(0xFF121212),
   ),
   cardColor: Color(0xFF363636),
-);
-
-final textTheme = TextTheme(
-  labelMedium: TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
+  textTheme: TextTheme(
+    titleMedium: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
   ),
 );
