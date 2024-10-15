@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+
+import '../widgets/widgets.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          // AppBar
+          SliverAppBar(
+            title: Text("To-Do List"),
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(70),
+              child: SearchField(),
+            ),
+          ),
+          // SizedBox
+          SliverToBoxAdapter(
+            child: SizedBox(height: 20),
+          ),
+          // Label Dropdown
+          SliverToBoxAdapter(
+            child: Row(
+              children: [
+                LabelDropdown(labelName: "Tasks"),
+              ],
+            ),
+          ),
+          // SizedBox
+          SliverToBoxAdapter(
+            child: SizedBox(height: 16),
+          ),
+          SliverList.builder(
+            itemCount: 5,
+            itemBuilder: (context, index) => TaskCard(
+                title: "Take out dog",
+                startDate: "15.10.24",
+                endDate: "15.10.24",
+                category: "Home",
+                priority: "4"),
+          ),
+          SliverToBoxAdapter(
+            child: Row(
+              children: [
+                LabelDropdown(labelName: "Complete"),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
