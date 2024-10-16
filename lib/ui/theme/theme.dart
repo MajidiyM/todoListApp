@@ -20,4 +20,7 @@ final darkTheme = ThemeData(
   textTheme: TextTheme(
     titleMedium: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
   ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Color(0xFF8687E7),
+  ),
 );
