@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list_app/screens/tasks_screen/tasks_screen.dart';
 
-import 'screens/home_screen/home_screen.dart';
 import 'ui/theme/theme.dart';
 
 void main() => runApp(MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "To-Do List",
-      home: HomeScreen(),
+      home: TasksScreen(),
       theme: darkTheme,
     );
   }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../widgets/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class TasksScreen extends StatelessWidget {
+  const TasksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +38,11 @@ class HomeScreen extends StatelessWidget {
           SliverList.builder(
             itemCount: 5,
             itemBuilder: (context, index) => TaskCard(
-                title: "Take out dog",
-                startDate: "15.10.24",
-                endDate: "15.10.24",
-                category: "Home",
-                priority: "4"),
-          ),
-          SliverToBoxAdapter(
-            child: Row(
-              children: [
-                LabelDropdown(labelName: "Complete"),
-              ],
+              title: "Take out dog",
+              startDate: "15.10.24",
+              endDate: "15.10.24",
+              category: "Home",
+              //priority: "4",
             ),
           ),
         ],
