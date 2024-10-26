@@ -15,10 +15,6 @@ class AppRouter extends RootStackRouter {
           path: "/",
           children: [
             AutoRoute(
-              page: DetailedTaskRoute.page,
-              path: "detailedTask",
-            ),
-            AutoRoute(
               page: SettingsRoute.page,
               path: "settings",
             ),
@@ -27,6 +23,10 @@ class AppRouter extends RootStackRouter {
               path: "tasks",
             ),
           ],
+        ),
+        AutoRoute(
+          page: DetailedTaskRoute.page,
+          path: "/detailedTask",
         ),
       ];
 }

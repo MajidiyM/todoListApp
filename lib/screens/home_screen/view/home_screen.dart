@@ -20,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: AutoTabsRouter(
         routes: [
           TasksRoute(),
-          DetailedTaskRoute(),
           SettingsRoute(),
         ],
         builder: (context, child) {
