@@ -1,9 +1,21 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+
+import '../widgets/widgets.dart';
 
 @RoutePage()
-class DetailedTaskScreen extends StatelessWidget {
+class DetailedTaskScreen extends StatefulWidget {
   const DetailedTaskScreen({super.key});
+
+  @override
+  _DetailedTaskScreenState createState() => _DetailedTaskScreenState();
+}
+
+class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   @override
   Widget build(BuildContext context) {
@@ -24,29 +36,85 @@ class DetailedTaskScreen extends StatelessWidget {
                 ),
               ),
             ),
+            // Task text
             SliverToBoxAdapter(
               child: Row(
                 children: [
                   Radio(value: null, groupValue: null, onChanged: null),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: theme.primaryColor,
-                                width: 1.0,
-                              ),
-                            ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: theme.primaryColor,
+                            width: 1.0,
                           ),
-                          child: TaskContent(),
                         ),
-                      ],
+                      ),
+                      child: TaskContent(),
                     ),
                   ),
                 ],
+              ),
+            ),
+            // SizedBox
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 16.0,
+              ),
+            ),
+            // Start Date
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.calendar_month_outlined,
+                      size: 25,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Start Date:",
+                      style: theme.textTheme.titleLarge,
+                    ),
+                    Spacer(),
+                    DatePickerButton(
+                      displayText: _formatDate(_startDate),
+                      onPressed: () => _showDateRangePicker(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // End Date
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      size: 25,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "End Date:",
+                      style: theme.textTheme.titleLarge,
+                    ),
+                    Spacer(),
+                    DatePickerButton(
+                      displayText: _formatDate(_endDate),
+                      onPressed: () => _showDateRangePicker(context),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -54,76 +122,41 @@ class DetailedTaskScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-class TaskContent extends StatefulWidget {
-  TaskContent({super.key});
-
-  @override
-  State<TaskContent> createState() => _TaskContentState();
-}
-
-class _TaskContentState extends State<TaskContent> {
-  bool isTaskEditing = false;
-
-  final TextEditingController _taskController =
-      TextEditingController(text: "Do math homework");
-
-  final FocusNode _focusNode = FocusNode();
-
-  @override
-  void initState() {
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus) {
-        setState(() {
-          isTaskEditing = false;
-        });
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _taskController.dispose();
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Future<void> _showDateRangePicker(BuildContext context) async {
     final theme = Theme.of(context);
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          isTaskEditing = true;
-        });
-        _focusNode.requestFocus();
-      },
-      child: isTaskEditing
-          ? TextField(
-              decoration: InputDecoration(
-                hintText: "Write task",
-                border: InputBorder.none,
-              ),
-              focusNode: _focusNode,
-              style: theme.textTheme.titleLarge,
-              controller: _taskController,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              onSubmitted: (_) {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Color(0xFF2f2d38),
+        title: Text("Select Start and End Dates"),
+        content: SizedBox(
+          height: 300,
+          width: 350,
+          child: SfDateRangePicker(
+            selectionMode: DateRangePickerSelectionMode.range,
+            onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+              if (args.value is PickerDateRange) {
                 setState(() {
-                  isTaskEditing = false;
+                  _startDate = args.value.startDate;
+                  _endDate = args.value.endDate;
                 });
-              },
-            )
-          : Container(
-              width: double.infinity,
-              child: Text(
-                _taskController.text,
-                style: theme.textTheme.titleLarge,
-              ),
-            ),
+              }
+            },
+            showActionButtons: true,
+            onSubmit: (Object? val) {
+              Navigator.pop(context);
+            },
+            onCancel: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      ),
     );
+  }
+
+  String _formatDate(DateTime? date) {
+    return date != null ? DateFormat('dd/MM/yyyy').format(date) : "Select date";
   }
 }
