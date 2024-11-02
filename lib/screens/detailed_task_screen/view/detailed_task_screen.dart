@@ -1,7 +1,8 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:todo_list_app/router/router.dart';
 
 import '../widgets/widgets.dart';
 
@@ -28,12 +29,11 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              leading: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  size: 30,
-                ),
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios_new),
+                onPressed: () {
+                  context.router.replaceAll([const HomeRoute()]);
+                },
               ),
             ),
             // Task text
@@ -60,63 +60,102 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
             // SizedBox
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 16.0,
+                height: 20.0,
               ),
             ),
             // Start Date
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.calendar_month_outlined,
-                      size: 25,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Start Date:",
-                      style: theme.textTheme.titleLarge,
-                    ),
-                    Spacer(),
-                    DatePickerButton(
-                      displayText: _formatDate(_startDate),
-                      onPressed: () => _showDateRangePicker(context),
-                    ),
-                  ],
+                child: TaskProperties(
+                  icon: Icons.calendar_month_outlined,
+                  text: "Start Date",
+                  buttonText: _formatDate(_startDate),
+                  onPressed: () => _showDateRangePicker(context),
                 ),
+              ),
+            ),
+            // SizedBox
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 20.0,
               ),
             ),
             // End Date
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.calendar_today_outlined,
-                      size: 25,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "End Date:",
-                      style: theme.textTheme.titleLarge,
-                    ),
-                    Spacer(),
-                    DatePickerButton(
-                      displayText: _formatDate(_endDate),
-                      onPressed: () => _showDateRangePicker(context),
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TaskProperties(
+                  icon: Icons.calendar_month_outlined,
+                  text: "End Date",
+                  buttonText: _formatDate(_endDate),
+                  onPressed: () => _showDateRangePicker(context),
                 ),
               ),
             ),
+            // SizedBox
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 20.0,
+              ),
+            ),
+            // Task Category
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TaskProperties(
+                    icon: Icons.category_outlined,
+                    text: "Task Category",
+                    buttonText: "Categories"),
+              ),
+            ),
+            // SizedBox
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 20.0,
+              ),
+            ),
+            // Task Priority
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TaskProperties(
+                  icon: Icons.flag_outlined,
+                  text: 'Task Priority',
+                  buttonText: 'Default',
+                ),
+              ),
+            ),
+            // SizedBox
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 20.0,
+              ),
+            ),
+            // Delete Button
+            SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  TextButton.icon(
+                    onPressed: () {
+                      print("delete");
+                    },
+                    label: Text(
+                      "Delete Task",
+                      style: theme.textTheme.titleLarge
+                          ?.copyWith(color: Colors.red),
+                    ),
+                    icon: Icon(
+                      Icons.delete_outline_rounded,
+                      color: Colors.red,
+                      size: 25,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Start Date
           ],
         ),
       ),
