@@ -4,9 +4,17 @@ class TaskPropertyButton extends StatelessWidget {
   const TaskPropertyButton({
     super.key,
     required this.buttonText,
+    this.icon,
+    this.color,
+    this.iconColor,
+    this.textColor,
   });
 
   final String buttonText;
+  final IconData? icon;
+  final Color? color;
+  final Color? iconColor;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +25,24 @@ class TaskPropertyButton extends StatelessWidget {
         vertical: 8,
       ),
       decoration: BoxDecoration(
-        color: Colors.grey[800],
+        color: color ?? Colors.grey[800],
         borderRadius: BorderRadius.circular(6),
       ),
-      child: Text(
-        buttonText,
-        style: theme.textTheme.bodyLarge,
+      child: Row(
+        children: [
+          if (icon != null)
+            Icon(
+              icon,
+              color: iconColor,
+            ),
+          SizedBox(
+            width: icon != null ? 8 : 0,
+          ),
+          Text(
+            buttonText,
+            style: theme.textTheme.bodyLarge?.copyWith(color: textColor),
+          ),
+        ],
       ),
     );
   }

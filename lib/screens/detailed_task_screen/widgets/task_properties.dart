@@ -7,17 +7,19 @@ class TaskProperties extends StatelessWidget {
     super.key,
     required this.icon,
     required this.text,
-    required this.buttonText,
     this.onPressed,
+    required this.selectedCategory,
   });
 
   final IconData icon;
   final String text;
-  final String buttonText;
+  final Map<String, dynamic> selectedCategory;
   final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final iconColor = selectedCategory["iconColor"];
+    final textColor = selectedCategory["iconColor"];
     final theme = Theme.of(context);
     return Row(
       children: [
@@ -31,7 +33,11 @@ class TaskProperties extends StatelessWidget {
         GestureDetector(
           onTap: onPressed,
           child: TaskPropertyButton(
-            buttonText: buttonText,
+            buttonText: selectedCategory["label"],
+            icon: selectedCategory["icon"],
+            color: selectedCategory["color"],
+            iconColor: selectedCategory["iconColor"],
+            textColor: selectedCategory["iconColor"],
           ),
         ),
       ],
