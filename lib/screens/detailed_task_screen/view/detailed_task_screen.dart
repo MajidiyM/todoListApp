@@ -57,39 +57,69 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                 ],
               ),
             ),
-            // SizedBox
+            //SizedBox
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 20.0,
+                height: 20,
               ),
             ),
-            // Start Date
+            // Start date
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: TaskProperties(
-                  icon: Icons.calendar_month_outlined,
-                  text: "Start Date",
-                  buttonText: _formatDate(_startDate),
-                  onPressed: () => _showDateRangePicker(context),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.calendar_month_outlined,
+                      size: 25,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Start Date:",
+                      style: theme.textTheme.titleLarge,
+                    ),
+                    Spacer(),
+                    DatePickerButton(
+                      displayText: _formatDate(_startDate),
+                      onPressed: () => _showDateRangePicker(context),
+                    ),
+                  ],
                 ),
               ),
             ),
-            // SizedBox
+            //SizedBox
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 20.0,
+                height: 20,
               ),
             ),
             // End Date
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: TaskProperties(
-                  icon: Icons.calendar_month_outlined,
-                  text: "End Date",
-                  buttonText: _formatDate(_endDate),
-                  onPressed: () => _showDateRangePicker(context),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      size: 25,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "End Date:",
+                      style: theme.textTheme.titleLarge,
+                    ),
+                    Spacer(),
+                    DatePickerButton(
+                      displayText: _formatDate(_endDate),
+                      onPressed: () => _showDateRangePicker(context),
+                    ),
+                  ],
                 ),
               ),
             ),
