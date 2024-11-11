@@ -207,7 +207,7 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                 child: TaskProperties(
                   icon: Icons.category_outlined,
                   text: "Task Category",
-                  selectedCategory: selectedCategory ?? categories[0],
+                  selectedCategory: selectedCategory,
                   onPressed: () => _showCategories(context),
                 ),
               ),
