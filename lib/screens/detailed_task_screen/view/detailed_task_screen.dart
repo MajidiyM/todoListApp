@@ -19,6 +19,7 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
   DateTime? _endDate;
 
   Map<String, dynamic>? selectedCategory;
+  Map<String, dynamic>? selectedPriority;
 
   final List<Map<String, dynamic>> categories = [
     {
@@ -88,6 +89,15 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
       "color": Color(0xFF80FFD1),
     },
   ];
+
+  final List<Map<String, dynamic>> priorities = List.generate(
+      10,
+      (index) => {
+            "icon": Icons.flag,
+            "iconColor": Colors.blueAccent,
+            "label": (index + 1).toString(),
+            "color": Colors.grey[800],
+          });
 
   @override
   Widget build(BuildContext context) {
@@ -205,10 +215,17 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: TaskProperties(
+                  title: "Task Categories",
+                  items: categories,
                   icon: Icons.category_outlined,
                   text: "Task Category",
-                  selectedCategory: selectedCategory,
-                  onPressed: () => _showCategories(context),
+                  selectedItem: selectedCategory,
+                  onSelected: (selected) {
+                    setState(() {
+                      selectedCategory = selected;
+                    });
+                  },
+                  onTap: () => _showSelectionDialog,
                 ),
               ),
             ),
@@ -218,17 +235,25 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                 height: 20.0,
               ),
             ),
-            // Task Priority
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 10),
-            //     child: TaskProperties(
-            //       icon: Icons.flag_outlined,
-            //       text: 'Task Priority',
-            //
-            //     ),
-            //   ),
-            // ),
+            // // Task Priority
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TaskProperties(
+                  title: "Task Properties",
+                  icon: Icons.flag_outlined,
+                  text: "Task Priority",
+                  items: priorities,
+                  selectedItem: selectedPriority,
+                  onSelected: (selected) {
+                    setState(() {
+                      selectedPriority = selected;
+                    });
+                  },
+                  onTap: () => _showSelectionDialog,
+                ),
+              ),
+            ),
             // SizedBox
             SliverToBoxAdapter(
               child: SizedBox(
@@ -302,21 +327,26 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
     return date != null ? DateFormat('dd/MM/yyyy').format(date) : "Select date";
   }
 
-  void _showCategories(BuildContext context) {
+  void _showSelectionDialog(
+      BuildContext context,
+      List<Map<String, dynamic>> items,
+      String title,
+      Function(Map<String, dynamic>) onSelected) {
     showDialog(
       context: context,
       builder: (context) => TaskPropertiesDialog(
-        categories: categories,
+        items: items,
+        title: title,
       ),
-    ).then((selectedCategory) {
-      if (selectedCategory != null) {
-        print("Selected category: $selectedCategory"); // Для отладки
-        setState(() {
-          this.selectedCategory = categories.firstWhere(
-            (category) => category["label"] == selectedCategory,
-            orElse: () => categories[0], // Default category
-          );
-        });
+    ).then((selectedLabel) {
+      if (selectedLabel != null) {
+        print("Selected item: $selectedLabel"); // For debugging
+        final selectedItem = items.firstWhere(
+          (item) => item["label"] == selectedLabel,
+          orElse: () => items[0], // Default item if none found
+        );
+        onSelected(
+            selectedItem); // Use the callback to update the selected item
       }
     });
   }
@@ -325,19 +355,21 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
 class TaskPropertiesDialog extends StatelessWidget {
   const TaskPropertiesDialog({
     super.key,
-    required this.categories,
+    required this.items,
+    required this.title,
   });
 
-  final List<Map<String, dynamic>> categories;
+  final List<Map<String, dynamic>> items;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Center(
+      title: Center(
         child: Padding(
           padding: EdgeInsets.only(bottom: 10.0),
           child: Text(
-            "Choose Category",
+            title,
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -353,12 +385,12 @@ class TaskPropertiesDialog extends StatelessWidget {
             mainAxisSpacing: 30,
             childAspectRatio: 0.8,
           ),
-          itemCount: categories.length,
+          itemCount: items.length,
           itemBuilder: (context, index) {
-            final category = categories[index];
+            final item = items[index];
             return GestureDetector(
               onTap: () {
-                Navigator.pop(context, category["label"]);
+                Navigator.pop(context, item);
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -368,12 +400,12 @@ class TaskPropertiesDialog extends StatelessWidget {
                     height: 64,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: category["color"],
+                        color: item["color"],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Icon(
-                        category["icon"],
-                        color: category["iconColor"],
+                        item["icon"],
+                        color: item["iconColor"],
                         size: 30,
                       ),
                     ),
@@ -382,7 +414,7 @@ class TaskPropertiesDialog extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    category["label"],
+                    item["label"],
                     style: TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   )

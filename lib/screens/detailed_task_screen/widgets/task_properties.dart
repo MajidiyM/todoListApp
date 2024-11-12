@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
-
-import 'widgets.dart';
+import 'package:todo_list_app/screens/detailed_task_screen/detailed_screen.dart';
 
 class TaskProperties extends StatelessWidget {
   const TaskProperties({
     super.key,
     required this.icon,
     required this.text,
-    this.onPressed,
-    this.selectedCategory,
+    required this.items,
+    required this.title,
+    this.onSelected,
+    this.selectedItem,
+    required this.onTap,
   });
 
   final IconData icon;
   final String text;
-  final Map<String, dynamic>? selectedCategory;
-  final VoidCallback? onPressed;
+  final List<Map<String, dynamic>> items;
+  final String title;
+  final Function(Map<String, dynamic>)? onSelected;
+  final Map<String, dynamic>? selectedItem;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final displayText = selectedCategory?['label'] ?? "Categories";
-    final displayIcon = selectedCategory?["icon"];
-    final displayColor = selectedCategory?["color"] ?? Colors.grey[800];
-    final displayIconColor = selectedCategory?["iconColor"];
-    final displayTextColor = selectedCategory?["iconColor"] ?? Colors.white;
+    final defaultText = text == "Task Category" ? "Categories" : "Priority";
+    final displayText = selectedItem?['label'] ?? defaultText;
+    final displayIcon = selectedItem?["icon"];
+    final displayColor = selectedItem?["color"] ?? Colors.grey[800];
+    final displayIconColor = selectedItem?["iconColor"];
+    final displayTextColor = selectedItem?["iconColor"] ?? Colors.white;
     final theme = Theme.of(context);
     return Row(
       children: [
@@ -34,7 +40,18 @@ class TaskProperties extends StatelessWidget {
         ),
         Spacer(),
         GestureDetector(
-          onTap: onPressed,
+          onTap: () async {
+            final selected = await showDialog<Map<String, dynamic>>(
+              context: context,
+              builder: (context) => TaskPropertiesDialog(
+                items: items,
+                title: title,
+              ),
+            );
+            if (selected != null && onSelected != null) {
+              onSelected!(selected);
+            }
+          },
           child: TaskPropertyButton(
             buttonText: displayText,
             icon: displayIcon,
