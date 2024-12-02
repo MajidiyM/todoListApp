@@ -40,11 +40,11 @@ class TasksScreen extends StatelessWidget {
           SliverList.builder(
             itemCount: 5,
             itemBuilder: (context, index) => TaskCard(
-              title: "Take out dog",
+              title: "Task",
               startDate: "15.10.24",
               endDate: "15.10.24",
-              category: "Home",
-              //priority: "4",
+              category: "Study",
+              priority: "4",
             ),
           ),
         ],
