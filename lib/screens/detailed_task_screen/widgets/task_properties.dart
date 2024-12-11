@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list_app/screens/detailed_task_screen/detailed_screen.dart';
+import 'package:todo_list_app/screens/detailed_task_screen/widgets/task_poperties_button.dart';
+import 'package:todo_list_app/screens/detailed_task_screen/widgets/task_properties_dialog.dart';
 
 class TaskProperties extends StatelessWidget {
   const TaskProperties({

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:todo_list_app/router/router.dart';
+import 'package:todo_list_app/screens/detailed_task_screen/widgets/tile_detailed_card.dart';
 
+import '../dialogs/show_category_dialog.dart';
 import '../widgets/widgets.dart';
 
 @RoutePage()
@@ -211,25 +213,38 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
               ),
             ),
             // Task Category
+            // SliverToBoxAdapter(
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 10),
+            //     child: TaskProperties(
+            //       title: "Task Categories",
+            //       items: categories,
+            //       icon: Icons.category_outlined,
+            //       text: "Task Category",
+            //       selectedItem: selectedCategory,
+            //       onSelected: (selected) {
+            //         setState(() {
+            //           selectedCategory = selected;
+            //         });
+            //       },
+            //       onTap: () => _showSelectionDialog,
+            //     ),
+            //   ),
+            // ),
+            // SizedBox
+
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: TaskProperties(
-                  title: "Task Categories",
-                  items: categories,
+                child: TileDetailedCard(
                   icon: Icons.category_outlined,
-                  text: "Task Category",
-                  selectedItem: selectedCategory,
-                  onSelected: (selected) {
-                    setState(() {
-                      selectedCategory = selected;
-                    });
-                  },
-                  onTap: () => _showSelectionDialog,
+                  title: "Task Categories",
+                  additionalTitle: "Task Category",
+                  onTap: () => showCategoryDialog(context),
                 ),
               ),
             ),
-            // SizedBox
+
             SliverToBoxAdapter(
               child: SizedBox(
                 height: 20.0,
