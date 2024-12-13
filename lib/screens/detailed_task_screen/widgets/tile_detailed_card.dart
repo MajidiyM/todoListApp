@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 
 class TileDetailedCard extends StatelessWidget {
-  const TileDetailedCard(
-      {super.key,
-      required this.icon,
-      required this.title,
-      required this.additionalTitle,
-      this.onTap});
+  const TileDetailedCard({
+    super.key,
+    this.icon,
+    required this.title,
+    required this.buttonTitle,
+    this.onTap,
+    this.buttonIcon,
+    this.buttonColor,
+    this.buttonIconColor,
+  });
 
-  final IconData icon;
+  final IconData? icon;
   final String title;
-  final String additionalTitle;
+  final String buttonTitle;
+  final IconData? buttonIcon;
+  final Color? buttonColor;
   final VoidCallback? onTap;
+  final Color? buttonIconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -21,25 +28,32 @@ class TileDetailedCard extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              Icon(
-                icon,
-                size: 25,
-              ),
+              Icon(icon, size: 25),
               const SizedBox(width: 6),
               Text(title, style: theme.textTheme.titleLarge),
             ],
           ),
         ),
-        Material(
-          clipBehavior: Clip.hardEdge,
-          color: Colors.grey[800],
-          borderRadius: const BorderRadius.all(Radius.circular(6)),
-          child: InkWell(
-            onTap: onTap,
+        GestureDetector(
+          onTap: onTap,
+          child: Material(
+            clipBehavior: Clip.hardEdge,
+            color: buttonColor ?? Colors.grey[800],
+            borderRadius: const BorderRadius.all(Radius.circular(6)),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 11),
-              child: Text(additionalTitle, style: theme.textTheme.bodyLarge),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  if (buttonIcon != null)
+                    Icon(buttonIcon, color: buttonIconColor),
+                  SizedBox(width: buttonIcon != null ? 8 : 0),
+                  Text(
+                    buttonTitle,
+                    style: theme.textTheme.bodyLarge
+                        ?.copyWith(color: buttonIconColor),
+                  )
+                ],
+              ),
             ),
           ),
         ),

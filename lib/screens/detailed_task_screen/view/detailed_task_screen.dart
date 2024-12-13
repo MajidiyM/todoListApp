@@ -4,6 +4,7 @@ import 'package:todo_list_app/router/router.dart';
 import 'package:todo_list_app/screens/detailed_task_screen/dialogs/show_date_range_picker.dart';
 import 'package:todo_list_app/screens/detailed_task_screen/widgets/tile_detailed_card.dart';
 
+import '../../../domain/models/category_model/category.dart';
 import '../dialogs/show_category_dialog.dart';
 import '../widgets/widgets.dart';
 
@@ -18,6 +19,7 @@ class DetailedTaskScreen extends StatefulWidget {
 class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
   DateTime? _startDate;
   DateTime? _endDate;
+  Category? selectedCategory;
 
   Map<String, dynamic>? selectedPriority;
 
@@ -182,8 +184,18 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                 child: TileDetailedCard(
                   icon: Icons.category_outlined,
                   title: "Task Categories",
-                  additionalTitle: "Task Category",
-                  onTap: () => showCategoryDialog(context),
+                  buttonTitle: selectedCategory?.label ?? "Select Categories",
+                  buttonColor: selectedCategory?.color,
+                  buttonIcon: selectedCategory?.icon,
+                  buttonIconColor: selectedCategory?.iconColor ?? Colors.white,
+                  onTap: () async {
+                    final category = await showCategoryDialog(context);
+                    if (category != null) {
+                      setState(() {
+                        selectedCategory = category;
+                      });
+                    }
+                  },
                 ),
               ),
             ),

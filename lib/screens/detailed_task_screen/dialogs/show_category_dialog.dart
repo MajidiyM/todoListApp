@@ -6,13 +6,14 @@ import 'package:todo_list_app/domain/services/domain_categories_services.dart';
 
 import '../../../domain/models/category_model/category.dart';
 
-Future<void> showCategoryDialog(
+Future showCategoryDialog(
   BuildContext context,
 ) async {
-  await showDialog(
+  final selected = await showDialog<Category>(
     context: context,
     builder: (context) => const CategoryDialog(),
   );
+  return selected;
 }
 
 class CategoryDialog extends StatefulWidget {
@@ -48,18 +49,57 @@ class _CategoryDialogState extends State<CategoryDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      title: Center(
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 10.0),
+          child: Text(
+            "Task Categories",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
       content: Column(
         children: [
           Expanded(
             child: SizedBox(
               height: 500,
-              width: 500,
-              child: ListView.builder(
-                shrinkWrap: true,
+              width: 327,
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 30,
+                    mainAxisSpacing: 30,
+                    childAspectRatio: 0.8),
                 itemCount: categoryList.length,
                 itemBuilder: (BuildContext context, int index) {
                   final item = categoryList[index];
-                  return Text(item.label);
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context, item);
+                      log("pressed ${item.label}");
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 64,
+                          height: 64,
+                          child: Material(
+                            color: item.color,
+                            borderRadius: BorderRadius.circular(10),
+                            child: Icon(item.icon,
+                                color: item.iconColor, size: 30),
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          item.label,
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
                 },
               ),
             ),
