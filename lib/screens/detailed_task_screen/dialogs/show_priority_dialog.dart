@@ -1,36 +1,36 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:todo_list_app/data/services/categories_service.dart';
-import 'package:todo_list_app/domain/services/domain_categories_services.dart';
 
-import '../../../domain/models/category_model/category.dart';
+import '../../../data/services/priorities_services.dart';
+import '../../../domain/models/priorities_model/priority.dart';
+import '../../../domain/services/domain_priorities_services.dart';
 
-Future showCategoryDialog(BuildContext context) async {
-  final selected = await showDialog<Category>(
+Future showPriorityDialog(BuildContext context) async {
+  final selected = await showDialog<Priority>(
     context: context,
-    builder: (context) => const CategoryDialog(),
+    builder: (context) => const PriorityDialog(),
   );
   return selected;
 }
 
-class CategoryDialog extends StatefulWidget {
-  const CategoryDialog({super.key});
+class PriorityDialog extends StatefulWidget {
+  const PriorityDialog({super.key});
 
   @override
-  State<CategoryDialog> createState() => _CategoryDialogState();
+  State<PriorityDialog> createState() => _PriorityDialogState();
 }
 
-class _CategoryDialogState extends State<CategoryDialog> {
-  List<Category> categoryList = [];
-  late final CategoriesService categoriesService;
+class _PriorityDialogState extends State<PriorityDialog> {
+  List<Priority> priorityList = [];
+  late final PrioritiesServices prioritiesServices;
 
-  Future<void> initCategories() async {
+  Future<void> initPriorities() async {
     try {
-      final response = await categoriesService.getCategories();
+      final response = await prioritiesServices.getPriorirties();
 
       setState(() {
-        categoryList.addAll(response);
+        priorityList.addAll(response);
       });
     } catch (e, s) {
       log("$e $s");
@@ -39,8 +39,8 @@ class _CategoryDialogState extends State<CategoryDialog> {
 
   @override
   void initState() {
-    categoriesService = CategoriesServiceImpl();
-    initCategories();
+    prioritiesServices = PrioritiesServiceImpl();
+    initPriorities();
     super.initState();
   }
 
@@ -51,7 +51,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
         child: Padding(
           padding: EdgeInsets.only(bottom: 10.0),
           child: Text(
-            "Task Categories",
+            "Task Priority",
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -64,16 +64,17 @@ class _CategoryDialogState extends State<CategoryDialog> {
               width: 327,
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 30,
-                    mainAxisSpacing: 30,
-                    childAspectRatio: 0.8),
-                itemCount: categoryList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final item = categoryList[index];
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 30,
+                  mainAxisSpacing: 30,
+                  childAspectRatio: 0.8,
+                ),
+                itemCount: priorityList.length,
+                itemBuilder: (BuildContext contex, int index) {
+                  final item = priorityList[index];
                   return GestureDetector(
                     onTap: () {
-                      Navigator.pop(context, item);
+                      Navigator.pop(contex, item);
                       log("pressed ${item.label}");
                     },
                     child: Column(
@@ -85,8 +86,11 @@ class _CategoryDialogState extends State<CategoryDialog> {
                           child: Material(
                             color: item.color,
                             borderRadius: BorderRadius.circular(10),
-                            child: Icon(item.icon,
-                                color: item.iconColor, size: 30),
+                            child: Icon(
+                              item.icon,
+                              color: item.iconColor,
+                              size: 30,
+                            ),
                           ),
                         ),
                         SizedBox(height: 6),

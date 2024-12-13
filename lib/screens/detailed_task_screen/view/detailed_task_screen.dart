@@ -2,9 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list_app/router/router.dart';
 import 'package:todo_list_app/screens/detailed_task_screen/dialogs/show_date_range_picker.dart';
+import 'package:todo_list_app/screens/detailed_task_screen/dialogs/show_priority_dialog.dart';
 import 'package:todo_list_app/screens/detailed_task_screen/widgets/tile_detailed_card.dart';
 
 import '../../../domain/models/category_model/category.dart';
+import '../../../domain/models/priorities_model/priority.dart';
 import '../dialogs/show_category_dialog.dart';
 import '../widgets/widgets.dart';
 
@@ -20,17 +22,7 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
   DateTime? _startDate;
   DateTime? _endDate;
   Category? selectedCategory;
-
-  Map<String, dynamic>? selectedPriority;
-
-  final List<Map<String, dynamic>> priorities = List.generate(
-      10,
-      (index) => {
-            "icon": Icons.flag,
-            "iconColor": Colors.blueAccent,
-            "label": (index + 1).toString(),
-            "color": Colors.grey[800],
-          });
+  Priority? selectedPriority;
 
   @override
   Widget build(BuildContext context) {
@@ -158,26 +150,6 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
               ),
             ),
             // Task Category
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 10),
-            //     child: TaskProperties(
-            //       title: "Task Categories",
-            //       items: categories,
-            //       icon: Icons.category_outlined,
-            //       text: "Task Category",
-            //       selectedItem: selectedCategory,
-            //       onSelected: (selected) {
-            //         setState(() {
-            //           selectedCategory = selected;
-            //         });
-            //       },
-            //       onTap: () => _showSelectionDialog,
-            //     ),
-            //   ),
-            // ),
-            // SizedBox
-
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -206,24 +178,27 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
               ),
             ),
             // Task Priority
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 10),
-            //     child: TaskProperties(
-            //       title: "Task Properties",
-            //       icon: Icons.flag_outlined,
-            //       text: "Task Priority",
-            //       items: priorities,
-            //       selectedItem: selectedPriority,
-            //       onSelected: (selected) {
-            //         setState(() {
-            //           selectedPriority = selected;
-            //         });
-            //       },
-            //       onTap: () => _showSelectionDialog,
-            //     ),
-            //   ),
-            // ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TileDetailedCard(
+                  icon: Icons.flag_outlined,
+                  title: "Task Priority",
+                  buttonTitle: selectedPriority?.label ?? "Select Priority",
+                  buttonColor: selectedPriority?.color,
+                  buttonIcon: selectedPriority?.icon,
+                  buttonIconColor: selectedPriority?.iconColor ?? Colors.white,
+                  onTap: () async {
+                    final priority = await showPriorityDialog(context);
+                    if (priority != null) {
+                      setState(() {
+                        selectedPriority = priority;
+                      });
+                    }
+                  },
+                ),
+              ),
+            ),
             // SizedBox
             SliverToBoxAdapter(
               child: SizedBox(
