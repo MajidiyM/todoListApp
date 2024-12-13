@@ -1,8 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:todo_list_app/router/router.dart';
+import 'package:todo_list_app/screens/detailed_task_screen/dialogs/show_date_range_picker.dart';
 import 'package:todo_list_app/screens/detailed_task_screen/widgets/tile_detailed_card.dart';
 
 import '../dialogs/show_category_dialog.dart';
@@ -20,77 +19,7 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
   DateTime? _startDate;
   DateTime? _endDate;
 
-  Map<String, dynamic>? selectedCategory;
   Map<String, dynamic>? selectedPriority;
-
-  final List<Map<String, dynamic>> categories = [
-    {
-      "icon": Icons.local_grocery_store_outlined,
-      "iconColor": Color(0xFF21A300),
-      "label": "Grocery",
-      "color": Color(0xFFCCFF80),
-    },
-    {
-      "icon": Icons.work_outline_outlined,
-      "iconColor": Color(0xFFA31D00),
-      "label": "Work",
-      "color": Color(0xFFFF9680),
-    },
-    {
-      "icon": Icons.sports_outlined,
-      "iconColor": Color(0xFF00A32F),
-      "label": "Sport",
-      "color": Color(0xFF80FFFF),
-    },
-    {
-      "icon": Icons.design_services_outlined,
-      "iconColor": Color(0xFF00A372),
-      "label": "Design",
-      "color": Color(0xFF80FFD9),
-    },
-    {
-      "icon": Icons.school_outlined,
-      "iconColor": Color(0xFF0055A3),
-      "label": "University",
-      "color": Color(0xFF809CFF),
-    },
-    {
-      "icon": Icons.people_outline,
-      "iconColor": Color(0xFFA30089),
-      "label": "Social",
-      "color": Color(0xFFFF80EB),
-    },
-    {
-      "icon": Icons.music_note_outlined,
-      "iconColor": Color(0xFFA000A3),
-      "label": "Music",
-      "color": Color(0xFFFC80FF),
-    },
-    {
-      "icon": Icons.health_and_safety_outlined,
-      "iconColor": Color(0xFF00A3A3),
-      "label": "Health",
-      "color": Color(0xFF80FFA3),
-    },
-    {
-      "icon": Icons.video_camera_back_outlined,
-      "iconColor": Color(0xFF0069A3),
-      "label": "Movie",
-      "color": Color(0xFF80D1FF),
-    },
-    {
-      "icon": Icons.home_outlined,
-      "iconColor": Color(0xFFA30000),
-      "label": "Home",
-      "color": Color(0xFFFF8080),
-    },
-    {
-      "icon": Icons.add,
-      "iconColor": Color(0xFF00A369),
-      "label": "Create New",
-      "color": Color(0xFF80FFD1),
-    },
-  ];
 
   final List<Map<String, dynamic>> priorities = List.generate(
       10,
@@ -166,8 +95,14 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                     ),
                     Spacer(),
                     DatePickerButton(
-                      displayText: _formatDate(_startDate),
-                      onPressed: () => _showDateRangePicker(context),
+                      displayText: formateDate(_startDate),
+                      onPressed: () => Utils().showDateRangePicker(context,
+                          onDateSelected: (start, end) {
+                        setState(() {
+                          _startDate = start;
+                          _endDate = end;
+                        });
+                      }),
                     ),
                   ],
                 ),
@@ -179,7 +114,7 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                 height: 20,
               ),
             ),
-            // End Date
+            //End Date
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -199,8 +134,16 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                     ),
                     Spacer(),
                     DatePickerButton(
-                      displayText: _formatDate(_endDate),
-                      onPressed: () => _showDateRangePicker(context),
+                      displayText: formateDate(_endDate),
+                      onPressed: () => Utils().showDateRangePicker(
+                        context,
+                        onDateSelected: (start, end) {
+                          setState(() {
+                            _startDate = start;
+                            _endDate = end;
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -250,25 +193,25 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                 height: 20.0,
               ),
             ),
-            // // Task Priority
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: TaskProperties(
-                  title: "Task Properties",
-                  icon: Icons.flag_outlined,
-                  text: "Task Priority",
-                  items: priorities,
-                  selectedItem: selectedPriority,
-                  onSelected: (selected) {
-                    setState(() {
-                      selectedPriority = selected;
-                    });
-                  },
-                  onTap: () => _showSelectionDialog,
-                ),
-              ),
-            ),
+            // Task Priority
+            // SliverToBoxAdapter(
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 10),
+            //     child: TaskProperties(
+            //       title: "Task Properties",
+            //       icon: Icons.flag_outlined,
+            //       text: "Task Priority",
+            //       items: priorities,
+            //       selectedItem: selectedPriority,
+            //       onSelected: (selected) {
+            //         setState(() {
+            //           selectedPriority = selected;
+            //         });
+            //       },
+            //       onTap: () => _showSelectionDialog,
+            //     ),
+            //   ),
+            // ),
             // SizedBox
             SliverToBoxAdapter(
               child: SizedBox(
@@ -303,66 +246,5 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _showDateRangePicker(BuildContext context) async {
-    final theme = Theme.of(context);
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Color(0xFF2f2d38),
-        title: Text("Select Start and End Dates"),
-        content: SizedBox(
-          height: 300,
-          width: 350,
-          child: SfDateRangePicker(
-            selectionMode: DateRangePickerSelectionMode.range,
-            onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-              if (args.value is PickerDateRange) {
-                setState(() {
-                  _startDate = args.value.startDate;
-                  _endDate = args.value.endDate;
-                });
-              }
-            },
-            showActionButtons: true,
-            onSubmit: (Object? val) {
-              Navigator.pop(context);
-            },
-            onCancel: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _formatDate(DateTime? date) {
-    return date != null ? DateFormat('dd/MM/yyyy').format(date) : "Select date";
-  }
-
-  void _showSelectionDialog(
-      BuildContext context,
-      List<Map<String, dynamic>> items,
-      String title,
-      Function(Map<String, dynamic>) onSelected) {
-    showDialog(
-      context: context,
-      builder: (context) => TaskPropertiesDialog(
-        items: items,
-        title: title,
-      ),
-    ).then((selectedLabel) {
-      if (selectedLabel != null) {
-        print("Selected item: $selectedLabel"); // For debugging
-        final selectedItem = items.firstWhere(
-          (item) => item["label"] == selectedLabel,
-          orElse: () => items[0], // Default item if none found
-        );
-        onSelected(
-            selectedItem); // Use the callback to update the selected item
-      }
-    });
   }
 }
