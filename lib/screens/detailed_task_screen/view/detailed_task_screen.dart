@@ -8,7 +8,8 @@ import 'package:todo_list_app/screens/detailed_task_screen/widgets/tile_detailed
 import '../../../domain/models/category_model/category.dart';
 import '../../../domain/models/priorities_model/priority.dart';
 import '../dialogs/show_category_dialog.dart';
-import '../widgets/widgets.dart';
+import '../widgets/datepicker_button.dart';
+import '../widgets/task_content.dart';
 
 @RoutePage()
 class DetailedTaskScreen extends StatefulWidget {
