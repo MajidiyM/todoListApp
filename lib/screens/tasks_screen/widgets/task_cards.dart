@@ -5,14 +5,14 @@ import '../tasks_screen.dart';
 class TaskCard extends StatelessWidget {
   const TaskCard({
     super.key,
-    required this.title,
+    this.title,
     this.startDate,
     this.endDate,
     this.category,
     this.priority,
   });
 
-  final String title;
+  final String? title;
   final String? startDate;
   final String? endDate;
   final String? category;
@@ -39,10 +39,11 @@ class TaskCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: theme.textTheme.titleLarge,
-                ),
+                if (title != null && title!.isNotEmpty)
+                  Text(
+                    title!,
+                    style: theme.textTheme.titleLarge,
+                  ),
                 SizedBox(
                   height: 10,
                 ),

@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_list_app/domain/bloc/task_bloc/task_bloc.dart';
+import 'package:todo_list_app/domain/services/domain_task_service.dart';
 import 'package:todo_list_app/router/router.dart';
 
 import 'ui/theme/theme.dart';
 
-void main() => runApp(ToDoListApp());
+void main() {
+  final taskService = TaskService();
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<TaskBloc>(
+            create: (context) => TaskBloc(taskService)..add(LoadTasks())),
+      ],
+      child: ToDoListApp(),
+    ),
+  );
+}
 
 class ToDoListApp extends StatefulWidget {
   const ToDoListApp({super.key});

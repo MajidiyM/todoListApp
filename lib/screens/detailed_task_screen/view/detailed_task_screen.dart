@@ -42,6 +42,17 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                   context.router.replaceAll([const HomeRoute()]);
                 },
               ),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      context.router.replaceAll([const HomeRoute()]);
+                    },
+                    icon: Icon(
+                      Icons.check,
+                      color: Colors.white,
+                      size: 30,
+                    ))
+              ],
             ),
             // Task text
             SliverToBoxAdapter(

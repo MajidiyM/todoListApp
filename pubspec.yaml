@@ -34,6 +34,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   auto_route: ^9.2.2
   syncfusion_flutter_datepicker: ^27.1.57
+  flutter_bloc: ^8.1.6
+  equatable: ^2.0.7
 
 
 dev_dependencies:

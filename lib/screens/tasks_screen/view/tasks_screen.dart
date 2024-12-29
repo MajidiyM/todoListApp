@@ -1,5 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:todo_list_app/domain/bloc/task_bloc/task_bloc.dart';
 
 import '../widgets/widgets.dart';
 
@@ -9,7 +12,8 @@ class TasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    context.read<TaskBloc>().add(LoadTasks());
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -25,28 +29,51 @@ class TasksScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: SizedBox(height: 20),
           ),
-          // Label Dropdown
-          SliverToBoxAdapter(
-            child: Row(
-              children: [
-                LabelDropdown(labelName: "Tasks"),
-              ],
-            ),
-          ),
           // SizedBox
           SliverToBoxAdapter(
             child: SizedBox(height: 16),
           ),
-          SliverList.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) => TaskCard(
-              title: "Task",
-              startDate: "15.10.24",
-              endDate: "15.10.24",
-              category: "Study",
-              priority: "4",
-            ),
-          ),
+
+          BlocBuilder<TaskBloc, TaskState>(builder: (context, state) {
+            if (state is TaskLoading) {
+              return const SliverToBoxAdapter(
+                child: Center(child: CircularProgressIndicator()),
+              );
+            } else if (state is TaskLoaded) {
+              if (state.tasks.isEmpty) {
+                return const SliverToBoxAdapter(
+                  child: Center(child: Text("No tasks available")),
+                );
+              }
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  childCount: state.tasks.length,
+                  (context, index) {
+                    final task = state.tasks[index];
+                    final dateFormat = DateFormat("dd.MM.yyyy");
+                    return TaskCard(
+                      title: task.title?.toString(),
+                      startDate: task.startDate != null
+                          ? dateFormat.format(task.startDate!)
+                          : null,
+                      endDate: task.endDate != null
+                          ? dateFormat.format(task.endDate!)
+                          : null,
+                      category: task.category?.toString(),
+                      priority: task.priority?.toString(),
+                    );
+                  },
+                ),
+              );
+            } else if (state is TaskError) {
+              return SliverToBoxAdapter(
+                child: Center(child: Text(state.message)),
+              );
+            }
+            return const SliverToBoxAdapter(
+              child: SizedBox(),
+            );
+          })
         ],
       ),
     );
