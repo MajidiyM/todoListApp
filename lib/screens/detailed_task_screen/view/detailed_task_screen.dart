@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_list_app/domain/bloc/task_bloc/task_bloc.dart';
 import 'package:todo_list_app/router/router.dart';
 import 'package:todo_list_app/screens/detailed_task_screen/dialogs/show_date_range_picker.dart';
 import 'package:todo_list_app/screens/detailed_task_screen/dialogs/show_priority_dialog.dart';
@@ -7,6 +11,7 @@ import 'package:todo_list_app/screens/detailed_task_screen/widgets/tile_detailed
 
 import '../../../domain/models/category_model/category.dart';
 import '../../../domain/models/priorities_model/priority.dart';
+import '../../../domain/models/task_model/task_model.dart';
 import '../dialogs/show_category_dialog.dart';
 import '../widgets/datepicker_button.dart';
 import '../widgets/task_content.dart';
@@ -24,6 +29,7 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
   DateTime? _endDate;
   Category? selectedCategory;
   Priority? selectedPriority;
+  late String _taskTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +52,17 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                 IconButton(
                     onPressed: () {
                       context.router.replaceAll([const HomeRoute()]);
+                      final newTask = Task(
+                          id: 0,
+                          title: _taskTitle,
+                          startDate: _startDate,
+                          endDate: _endDate,
+                          category: selectedCategory,
+                          priority: selectedPriority);
+
+                      context.read<TaskBloc>().add(AddTask(newTask));
+
+                      log("Task details: ${newTask}");
                     },
                     icon: Icon(
                       Icons.check,
@@ -69,7 +86,13 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                           ),
                         ),
                       ),
-                      child: TaskContent(),
+                      child: TaskContent(
+                        onTextChanged: (text) {
+                          setState(() {
+                            _taskTitle = text;
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ],

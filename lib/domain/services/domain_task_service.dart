@@ -13,7 +13,7 @@ class TaskService {
 
   Future<void> updateTask(Task updatedTask) async {
     final index = _tasks.indexWhere((task) => task.id == updatedTask.id);
-    if (index != 1) {
+    if (index != -1) {
       _tasks[index] = updatedTask;
     }
   }
@@ -21,4 +21,8 @@ class TaskService {
   Future<void> deleteTask(String taskId) async {
     _tasks.removeWhere((task) => task.id == taskId);
   }
+}
+
+void main() {
+  final taskService = TaskService();
 }

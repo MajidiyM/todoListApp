@@ -52,15 +52,18 @@ class TasksScreen extends StatelessWidget {
                     final task = state.tasks[index];
                     final dateFormat = DateFormat("dd.MM.yyyy");
                     return TaskCard(
-                      title: task.title?.toString(),
+                      title: task.title,
                       startDate: task.startDate != null
                           ? dateFormat.format(task.startDate!)
                           : null,
                       endDate: task.endDate != null
                           ? dateFormat.format(task.endDate!)
                           : null,
-                      category: task.category?.toString(),
-                      priority: task.priority?.toString(),
+                      category: task.category?.label.toString(),
+                      priority: task.priority?.label.toString(),
+                      color: task.category?.color,
+                      iconColor: task.category?.iconColor,
+                      icon: task.category?.icon,
                     );
                   },
                 ),

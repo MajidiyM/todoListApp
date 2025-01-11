@@ -10,6 +10,9 @@ class TaskCard extends StatelessWidget {
     this.endDate,
     this.category,
     this.priority,
+    this.color,
+    this.iconColor,
+    this.icon,
   });
 
   final String? title;
@@ -17,6 +20,9 @@ class TaskCard extends StatelessWidget {
   final String? endDate;
   final String? category;
   final String? priority;
+  final Color? color;
+  final Color? iconColor;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +61,12 @@ class TaskCard extends StatelessWidget {
                       if (startDate != null && endDate != null)
                         TaskDates(startDate: startDate, endDate: endDate),
                       if (category != null && category!.isNotEmpty)
-                        CategoryTask(category: category),
+                        CategoryTask(
+                          category: category,
+                          iconColor: iconColor,
+                          color: color,
+                          icon: icon,
+                        ),
                       if (priority != null && priority!.isNotEmpty)
                         PriorityTask(priority: priority)
                     ],

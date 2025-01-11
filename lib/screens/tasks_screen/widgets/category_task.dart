@@ -4,9 +4,15 @@ class CategoryTask extends StatelessWidget {
   const CategoryTask({
     super.key,
     required this.category,
+    required this.iconColor,
+    required this.color,
+    this.icon,
   });
 
   final String? category;
+  final Color? color;
+  final Color? iconColor;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +21,17 @@ class CategoryTask extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
-        backgroundColor: Color(0xFF809CFF),
-        iconColor: Color(0xFF0055A3),
+        backgroundColor: color,
       ),
       onPressed: () {},
       label: Text(
         category ?? "",
-        style: TextStyle(color: Colors.white, fontSize: 14),
+        style: TextStyle(color: iconColor, fontSize: 14),
       ),
-      icon: Icon(Icons.school_outlined),
+      icon: Icon(
+        icon,
+        color: iconColor,
+      ),
     );
   }
 }

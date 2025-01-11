@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TaskContent extends StatefulWidget {
-  TaskContent({super.key});
+  final Function(String) onTextChanged;
+  TaskContent({super.key, required this.onTextChanged});
 
   @override
   State<TaskContent> createState() => _TaskContentState();
@@ -10,8 +11,7 @@ class TaskContent extends StatefulWidget {
 class _TaskContentState extends State<TaskContent> {
   bool isTaskEditing = false;
 
-  final TextEditingController _taskController =
-      TextEditingController(text: "Do math homework");
+  final TextEditingController _taskController = TextEditingController();
 
   final FocusNode _focusNode = FocusNode();
 
@@ -55,6 +55,9 @@ class _TaskContentState extends State<TaskContent> {
               controller: _taskController,
               keyboardType: TextInputType.multiline,
               maxLines: null,
+              onChanged: (value) {
+                widget.onTextChanged(value);
+              },
               onSubmitted: (_) {
                 setState(() {
                   isTaskEditing = false;

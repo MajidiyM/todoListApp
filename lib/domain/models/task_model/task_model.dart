@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:todo_list_app/domain/models/category_model/category.dart';
+import 'package:todo_list_app/domain/models/priorities_model/priority.dart';
 
 class Task {
   Task(
@@ -10,9 +11,9 @@ class Task {
       required this.priority});
 
   final int id;
-  final int title;
+  final String title;
   final DateTime? startDate;
   final DateTime? endDate;
-  final Widget category;
-  final Widget priority;
+  final Category? category;
+  final Priority? priority;
 }
