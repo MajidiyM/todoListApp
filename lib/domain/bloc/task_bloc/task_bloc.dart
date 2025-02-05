@@ -46,7 +46,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   Future<void> _onDeleteTask(DeleteTask event, Emitter<TaskState> emit) async {
     try {
-      await taskService.deleteTask(event.taskId as String);
+      await taskService.deleteTask(event.taskId);
       add(LoadTasks());
     } catch (e, s) {
       emit(TaskError("Failed to delete task ${e} ${s}"));

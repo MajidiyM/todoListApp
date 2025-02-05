@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,25 +48,24 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
               ),
               actions: [
                 IconButton(
-                    onPressed: () {
-                      context.router.replaceAll([const HomeRoute()]);
-                      final newTask = Task(
-                          id: 0,
-                          title: _taskTitle,
-                          startDate: _startDate,
-                          endDate: _endDate,
-                          category: selectedCategory,
-                          priority: selectedPriority);
-
-                      context.read<TaskBloc>().add(AddTask(newTask));
-
-                      log("Task details: ${newTask}");
-                    },
-                    icon: Icon(
-                      Icons.check,
-                      color: Colors.white,
-                      size: 30,
-                    ))
+                  onPressed: () {
+                    final newTask = Task(
+                      id: 0, // id генерируется базой данных
+                      title: _taskTitle,
+                      startDate: _startDate,
+                      endDate: _endDate,
+                      category: selectedCategory,
+                      priority: selectedPriority,
+                    );
+                    context.read<TaskBloc>().add(AddTask(newTask));
+                    context.router.replaceAll([const HomeRoute()]);
+                  },
+                  icon: const Icon(
+                    Icons.check,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
               ],
             ),
             // Task text

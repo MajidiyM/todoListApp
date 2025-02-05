@@ -30,11 +30,10 @@ class UpdateTask extends TaskEvent {
 }
 
 class DeleteTask extends TaskEvent {
-  final Task taskId;
+  final int taskId;
 
   DeleteTask(this.taskId);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [taskId];
 }

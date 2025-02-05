@@ -11,6 +11,7 @@ class PrioritiesServiceImpl implements PrioritiesServices {
       return List.generate(
         10,
         (index) => Priority(
+          id: index + 1,
           iconColor: Colors.blueAccent,
           icon: Icons.flag,
           label: (index + 1).toString(),
